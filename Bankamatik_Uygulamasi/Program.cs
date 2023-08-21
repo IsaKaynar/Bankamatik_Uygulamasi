@@ -14,12 +14,12 @@
         {
             while (true)
             {
-                bool kartSecim = KartliKartsizBölümSecimi(Giris());
+                bool kartSecim = KartliKartsizBolumSecimi(Giris());
                 bool sifreDogruMu = KartliIslemBolumu(kartSecim);
                 string menuSecim;
                 do
                 {
-                    menuSecim = AnaMenü(sifreDogruMu);
+                    menuSecim = AnaMenu(sifreDogruMu);
                     MenuSecimi(menuSecim);
                 } while (menuSecim != "0");
             }
@@ -40,7 +40,7 @@
             return secim;
         }
 
-        static bool KartliKartsizBölümSecimi(int secim)
+        static bool KartliKartsizBolumSecimi(int secim)
         {
             bool kartlibolum = false;
             //kartlibolum = secim == 1 ? kartlibolum = true : kartlibolum;
@@ -77,7 +77,7 @@
             return sifreDogruMu;
         }
 
-        static string AnaMenü(bool sifreDogruMu)
+        static string AnaMenu(bool sifreDogruMu)
         {
             string secim = "0";
             if (sifreDogruMu)
