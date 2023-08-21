@@ -26,29 +26,29 @@
 
         }
 
-        static byte Giris()
+        static string Giris()
         {
-            byte secim;
+            string secim;
             do
             {
                 Console.WriteLine("\n******  BANKAMIZA HOŞ GELDİNİZ  ******\n");
                 Console.WriteLine("\tKartlı işlem için\t1");
                 Console.WriteLine("\tKartsız işlem için\t2");
-                secim = Convert.ToByte(Console.ReadLine());
+                secim = Console.ReadLine();
                 Console.WriteLine();
-            } while (secim != 1 && secim != 2);
+            } while (secim != "1" && secim != "2");
             return secim;
         }
 
-        static bool KartliKartsizBolumSecimi(int secim)
+        static bool KartliKartsizBolumSecimi(string secim)
         {
             bool kartlibolum = false;
             //kartlibolum = secim == 1 ? kartlibolum = true : kartlibolum;
-            if (secim == 1)
+            if (secim == "1")
             {
                 kartlibolum = true;
             }
-            else if (secim == 2)
+            else if (secim == "2")
             {
                 Console.WriteLine("Bu bölüm henüz aktif değildir.");
             }
