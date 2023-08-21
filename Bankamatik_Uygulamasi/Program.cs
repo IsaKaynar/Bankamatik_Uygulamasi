@@ -1,4 +1,4 @@
-﻿namespace Soru_5_Bankamatik
+﻿namespace Bankamatik
 {
     internal class Program
     {
