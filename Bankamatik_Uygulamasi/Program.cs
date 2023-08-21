@@ -16,12 +16,12 @@
             {
                 bool kartSecim = KartliKartsizBölümSecimi(Giris());
                 bool sifreDogruMu = KartliIslemBolumu(kartSecim);
-                byte menuSecim;
+                string menuSecim;
                 do
                 {
                     menuSecim = AnaMenü(sifreDogruMu);
                     MenuSecimi(menuSecim);
-                } while (menuSecim != 0);
+                } while (menuSecim != "0");
             }
 
         }
@@ -58,11 +58,11 @@
         public bool KartliIslemBolumu(bool secim)
         {
             bool sifreDogruMu = false;
+            string girilenSifre;
             if (secim)
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    string girilenSifre;
                     Console.WriteLine("Şifre giriniz");
                     girilenSifre = Console.ReadLine();
                     Console.WriteLine();
@@ -77,9 +77,9 @@
             return sifreDogruMu;
         }
 
-        static byte AnaMenü(bool sifreDogruMu)
+        static string AnaMenü(bool sifreDogruMu)
         {
-            byte secim = 0;
+            string secim = "0";
             if (sifreDogruMu)
             {
                 Console.WriteLine("*******  ANA MENÜ  *******");
@@ -90,72 +90,72 @@
                 Console.WriteLine("Ödemeler\t\t 5");
                 Console.WriteLine("Bilgi Güncelleme\t 6");
                 Console.WriteLine("ÇIKIŞ\t\t\t 0");
-                secim = Convert.ToByte(Console.ReadLine());
+                secim = Console.ReadLine();
                 Console.WriteLine();
             }
             return secim;
         }
 
-        public void MenuSecimi(byte secim)
+        public void MenuSecimi(string secim)
         {
             switch (secim)
             {
-                case 1:
+                case "1":
                     ParaCek();
                     break;
-                case 2:
-                    byte deger = ParaYatirSecimi();
+                case "2":
+                    string deger = ParaYatirSecimi();
                     switch (deger)
                     {
-                        case 1:
+                        case "1":
                             KrediKartinaYatir();
                             break;
-                        case 2:
+                        case "2":
                             HesabaYatir();
                             break;
                     }
                     break;
-                case 3:
-                    byte deger2 = ParaTransferleriSecimi();
+                case "3":
+                    string deger2 = ParaTransferleriSecimi();
                     switch (deger2)
                     {
-                        case 1:
+                        case "1":
                             BaskaHesabaEFT();
                             break;
-                        case 2:
+                        case "2":
                             BaskaHesabaHavale();
                             break;
                     }
                     break;
-                case 4:
+                case "4":
                     EgitimOdemeleri();
                     break;
-                case 5:
-                    byte deger3 = Odemeler();
+                case "5":
+                    string deger3 = Odemeler();
                     switch (deger3)
                     {
-                        case 1:
+                        case "1":
                             ElektrikFaturasiOdemesi();
                             break;
-                        case 2:
+                        case "2":
                             SuFaturasiOdemesi();
                             break;
-                        case 3:
+                        case "3":
                             TelefonFaturasiOdemesi();
                             break;
-                        case 4:
+                        case "4":
                             InternetFaturasiOdemesi();
                             break;
-                        case 5:
+                        case "5":
                             OgsOdemeleri();
                             break;
                     }
                     break;
-                case 6:
-                    byte deger4 = BilgiGuncelleme();
+                case "6":
+                    string deger4 = BilgiGuncelleme();
                     switch (deger4)
                     {
-                        case 1:
+                        case "1":
                             SifreDegistirme();
                             break;
                     }
@@ -238,35 +238,58 @@
             ParaCekimTransferOdemeMethodu("Çekilecek", "çekilmiştir");
         }
 
-        static byte ParaYatirSecimi()
+        static string ParaYatirSecimi()
         {
-            byte secim;
+            string secim;
             do
             {
                 Console.WriteLine("Kredi Kartına\t\t 1");
                 Console.WriteLine("Kendi Hesabınıza\t 2");
-                secim = Convert.ToByte(Console.ReadLine());
+                secim = Console.ReadLine();
                 Console.WriteLine();
-            } while (secim != 1 && secim != 2);
+            } while (secim != "1" && secim != "2");
             return secim;
         }
 
         public void KrediKartinaYatir(bool secim = true)
         {
-            string kkNo;
-
             Console.WriteLine("16 haneli Kredi Kartı numaranızı giriniz");
-            kkNo = Console.ReadLine();
-
-            while (kkNo.Length != 16)
+            string kkNo = Console.ReadLine();
+            bool sonuc = KrediKartNoDogruMu(kkNo);
+            while (sonuc)
             {
-                Console.WriteLine("Kredi kartı numaranızı eksik girdiniz");
-                Console.WriteLine("16 haneli Kredi Kartı numaranızı tekrar giriniz");
+                Console.WriteLine("Kart numarasını eksik girdiniz, tekrar giriniz");
                 kkNo = Console.ReadLine();
+                sonuc = KrediKartNoDogruMu(kkNo);
             }
             Console.WriteLine();
             ParaCekimTransferOdemeMethodu("Yatırılacak", "yatırılmıştır");
 
+        }
+
+        public bool KrediKartNoDogruMu(string kartNo)
+        {
+            int counter = 0;
+            bool sonuc = true;
+            char[] sayilar = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+            if (kartNo.Length == 16)
+            {
+                for (int i = 0; i < kartNo.Length; i++)
+                {
+                    for (int j = 0; j < sayilar.Length; j++)
+                    {
+                        if (kartNo[i] == sayilar[j])
+                        {
+                            counter++;
+                        }
+                    }
+                }
+                if (counter == 16)
+                {
+                    sonuc = false;
+                }
+            }
+            return sonuc;
         }
 
         public void HesabaYatir(bool secim = false)
@@ -279,16 +302,16 @@
             Console.WriteLine("\nAna menü için (9), ÇIKIŞ için (0) a basınız");
         }
 
-        static byte ParaTransferleriSecimi()
+        static string ParaTransferleriSecimi()
         {
-            byte secim;
+            string secim;
             do
             {
                 Console.WriteLine("Başka Hesaba EFT\t 1");
                 Console.WriteLine("Başka Hesaba Havale\t 2");
-                secim = Convert.ToByte(Console.ReadLine());
+                secim = Console.ReadLine();
                 Console.WriteLine();
-            } while (secim != 1 && secim != 2);
+            } while (secim != "1" && secim != "2");
             return secim;
         }
 
@@ -385,16 +408,16 @@
             Console.WriteLine("Şu An Erişim Sağlanamıyor!!!\n");
         }
 
-        static byte Odemeler()
+        static string Odemeler()
         {
-            byte secim = 0;
+            string secim = "0";
             Console.WriteLine("*******  Fatura Ödemeleri  *******");
             Console.WriteLine("Elektrik Faturası\t 1");
             Console.WriteLine("Su Faturası\t\t 2");
             Console.WriteLine("Telefon Faturası\t 3");
             Console.WriteLine("İnternet Faturası\t 4");
             Console.WriteLine("OGS Ödemeleri\t\t 5");
-            secim = Convert.ToByte(Console.ReadLine());
+            secim = Console.ReadLine();
             Console.WriteLine();
             return secim;
         }
@@ -429,10 +452,10 @@
             ParaCekimTransferOdemeMethodu("Ödenecek", "ödenmiştir");
         }
 
-        static byte BilgiGuncelleme()
+        static string BilgiGuncelleme()
         {
             Console.WriteLine("Şifre değiştirmek için \t1");
-            return Convert.ToByte(Console.ReadLine());
+            return Console.ReadLine();
         }
 
         public void SifreDegistirme()
