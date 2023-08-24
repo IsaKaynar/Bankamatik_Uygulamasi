@@ -1,15 +1,21 @@
-﻿namespace Bankamatik
+﻿using System.ComponentModel.Design;
+using System.Reflection.PortableExecutable;
+
+namespace Bankamatik
 {
     internal class Program
     {
-        double kasaBakiye = 250;
-        string sifre = "1";
+        double kasaBakiye = 250; // Başlangıç bakiyesi global değişken olarak tanımlanmıştır
+        string sifre = "1"; // Aynı şekilde şifre
+        bool direkCikis = false; // işlemler esnasında çıkış yapabilmek için kullandığımız değişken
         static void Main(string[] args)
         {
             Program a = new Program();
             a.Calistir();
         }
-
+        /// <summary>
+        /// Sistemi döngü üzerinde çalıştıran ana method
+        /// </summary>
         public void Calistir()
         {
             while (true)
@@ -19,6 +25,11 @@
                 string menuSecim;
                 do
                 {
+                    if (direkCikis == true)
+                    {
+                        direkCikis = false;
+                        break;
+                    }
                     menuSecim = AnaMenu(sifreDogruMu);
                     MenuSecimi(menuSecim);
                 } while (menuSecim != "0");
@@ -26,6 +37,10 @@
 
         }
 
+        /// <summary>
+        /// Kartlı kartsız seçimi için değer döndüren method
+        /// </summary>
+        /// <returns></returns>
         static string Giris()
         {
             string secim;
@@ -40,6 +55,11 @@
             return secim;
         }
 
+        /// <summary>
+        /// Aldığı değere göre kartlı kartsız seçimi yapan method
+        /// </summary>
+        /// <param name="secim"></param>
+        /// <returns></returns>
         static bool KartliKartsizBolumSecimi(string secim)
         {
             bool kartlibolum = false;
@@ -55,6 +75,11 @@
             return kartlibolum;
         }
 
+        /// <summary>
+        /// Kartlı işlem bölümü girişi için şifre kontrolü yapan method
+        /// </summary>
+        /// <param name="secim"></param>
+        /// <returns></returns>
         public bool KartliIslemBolumu(bool secim)
         {
             bool sifreDogruMu = false;
@@ -71,31 +96,41 @@
                         sifreDogruMu = true;
                         break;
                     }
-                    Console.WriteLine("Şifrenizi 3 kez yanlış girdiniz. Çıkış yapılıyor");
                 }
+                if (sifreDogruMu == false)
+                    Console.WriteLine("Şifrenizi 3 kez yanlış girdiniz. Çıkış yapılıyor");
             }
             return sifreDogruMu;
         }
 
+        /// <summary>
+        /// Menüdeki seçeneklere göre değer döndüren method
+        /// </summary>
+        /// <param name="sifreDogruMu"></param>
+        /// <returns></returns>
         static string AnaMenu(bool sifreDogruMu)
         {
             string secim = "0";
             if (sifreDogruMu)
             {
-                Console.WriteLine("*******  ANA MENÜ  *******");
-                Console.WriteLine("Para Çekmek\t\t 1");
-                Console.WriteLine("Para Yatırmak\t\t 2");
-                Console.WriteLine("Para Transferleri\t 3");
-                Console.WriteLine("Eğitim Ödemeleri\t 4");
-                Console.WriteLine("Ödemeler\t\t 5");
-                Console.WriteLine("Bilgi Güncelleme\t 6");
-                Console.WriteLine("ÇIKIŞ\t\t\t 0");
+                Console.WriteLine("\t*******  ANA MENÜ  *******");
+                Console.WriteLine("\tPara Çekmek\t\t 1");
+                Console.WriteLine("\tPara Yatırmak\t\t 2");
+                Console.WriteLine("\tPara Transferleri\t 3");
+                Console.WriteLine("\tEğitim Ödemeleri\t 4");
+                Console.WriteLine("\tÖdemeler\t\t 5");
+                Console.WriteLine("\tBilgi Güncelleme\t 6");
+                Console.WriteLine("\tÇIKIŞ\t\t\t 0");
                 secim = Console.ReadLine();
                 Console.WriteLine();
             }
             return secim;
         }
 
+        /// <summary>
+        /// Menü işlemleri ve alt işlemlerin seçiminin yapıldığı switch methodu
+        /// </summary>
+        /// <param name="secim"></param>
         public void MenuSecimi(string secim)
         {
             switch (secim)
@@ -163,6 +198,11 @@
             }
         }
 
+        /// <summary>
+        /// Para çekim, havale, kk ödemesi, genel ödemelerin yapılmasını sağlayan method
+        /// </summary>
+        /// <param name="islem"></param>
+        /// <param name="islem2"></param>
         public void ParaCekimTransferOdemeMethodu(string islem, string islem2)
         {
             double degiskenKasa = 0;
@@ -173,10 +213,16 @@
             Console.WriteLine();
 
             string tekrarTutarGir = "2";
+            // Aşağıdaki while: doğrulama, tutar güncelleme, çıkış işlemini yapar 
             while (tekrarTutarGir == "2")
             {
-                Console.WriteLine(islem + " Tutar: " + tutar + " TL , dogru ise \tHerhangi bir tuşa basın.. \nyeniden tutar girmek için \t\t2 \nANA MENÜ için \t\t\t\t9 \nÇIKIŞ için \t\t\t\t0");
+                Console.WriteLine(islem + " Tutar: " + tutar + " TL\n\nDogru ise \t\t\t1 \nYeniden tutar girmek için \t2 \nANA MENÜ \t\t\t9 \nÇIKIŞ \t\t\t\t0");
                 tekrarTutarGir = Console.ReadLine();
+                while (!(tekrarTutarGir == "1" || tekrarTutarGir == "2" || tekrarTutarGir == "9" || tekrarTutarGir == "0"))
+                {
+                    Console.WriteLine("\nYanlış bir tuşa bastınız!!\n\nDogru ise \t\t\t1 \nyeniden tutar girmek için \t2 \nANA MENÜ için \t\t\t9 \nÇIKIŞ için \t\t\t0");
+                    tekrarTutarGir = Console.ReadLine();
+                }
                 Console.WriteLine();
                 if (tekrarTutarGir == "2")
                 {
@@ -184,38 +230,37 @@
                     tutar = Convert.ToDouble(Console.ReadLine());
                     Console.WriteLine();
                 }
-                else if (tekrarTutarGir == "9")
-                {
-                    //Console.WriteLine("Ana menüye dönmeli");
-                  
-                }
                 else if (tekrarTutarGir == "0")
                 {
-                    //Console.WriteLine("Çıkış Yapmalı");
+                    direkCikis = true;
                 }
             }
             degiskenKasa = kasaBakiye - tutar;
-            if (degiskenKasa >= 0)
+            if (degiskenKasa >= 0 && tekrarTutarGir == "1")
             {
                 kasaBakiye -= tutar;
                 Console.WriteLine("İşleminiz Tamamlanmıştır!!!");
                 Console.WriteLine("\nGüncel Bakiye: " + kasaBakiye + " TL\n");
-
             }
+            //Aşağıdaki while: işlem bakiyesi yetersiz ise güncelleme veya mevcut bakiyeyi kullanmamızı sağlar
             double kullanilabilirTutar = 0;
             while (degiskenKasa < 0)
             {
                 degiskenKasa = 0;
-                Console.WriteLine("\nHesap bakiyesi yetersiz!\nEn fazla: " + kasaBakiye + " TL lik işlem yapabilirsiniz");
-                Console.Write("Tekrar tutar girmek için (1), kullanılabilir bakiye tutarı için (2) ye basınız: ");
+                Console.WriteLine("\nHesap bakiyesi yetersiz!\n\nEn fazla: " + kasaBakiye + " TL lik işlem yapabilirsiniz");
+                Console.Write("Tekrar tutar girmek için \t\t1\nKullanılabilir bakiye tutarı için \t2\n");
                 kullanilabilirTutar = Convert.ToDouble(Console.ReadLine());
                 if (kullanilabilirTutar == 1)
                 {
                     Console.Write(islem + " tutarı giriniz: ");
                     tutar = Convert.ToDouble(Console.ReadLine());
                     degiskenKasa = kasaBakiye - tutar;
-                    //Console.WriteLine("İşleminiz Tamamlanmıştır!!!");
-                    //Console.WriteLine("\nGüncel Bakiye: " + kasaBakiye + " TL\n");
+                    if (degiskenKasa >= 0 && tekrarTutarGir == "1")
+                    {
+                        kasaBakiye -= tutar;
+                        Console.WriteLine("\nİşleminiz Tamamlanmıştır!!!");
+                        Console.WriteLine("\nGüncel Bakiye: " + kasaBakiye + " TL\n");
+                    }
                 }
                 else if (kullanilabilirTutar == 2)
                 {
@@ -225,54 +270,88 @@
                     Console.WriteLine("İşleminiz Tamamlanmıştır!!!");
                     Console.WriteLine("\nGüncel Bakiye: " + kasaBakiye + " TL\n");
                 }
-
             }
-            //kasaBakiye -= tutar;
-            //Console.WriteLine("İşleminiz Tamamlanmıştır!!!");
-            //Console.WriteLine("\nGüncel Bakiye: " + kasaBakiye + " TL\n");
-
         }
-            
+           
+        /// <summary>
+        /// Para çekimi için yönlendirme methodu
+        /// </summary>
         public void ParaCek()
         {
             ParaCekimTransferOdemeMethodu("Çekilecek", "çekilmiştir");
         }
 
+        /// <summary>
+        /// Para yatırma seçeneklerine göre değer döndüren method
+        /// </summary>
+        /// <returns></returns>
         static string ParaYatirSecimi()
         {
             string secim;
             do
             {
-                Console.WriteLine("Kredi Kartına\t\t 1");
-                Console.WriteLine("Kendi Hesabınıza\t 2");
+                Console.WriteLine("\tKredi Kartına\t\t 1");
+                Console.WriteLine("\tKendi Hesabınıza\t 2");
                 secim = Console.ReadLine();
                 Console.WriteLine();
             } while (secim != "1" && secim != "2");
             return secim;
         }
 
+        /// <summary>
+        /// Kredi Kartı ödeme methodu
+        /// </summary>
+        /// <param name="secim"></param>
         public void KrediKartinaYatir(bool secim = true)
         {
             Console.WriteLine("16 haneli Kredi Kartı numaranızı giriniz");
             string kkNo = Console.ReadLine();
-            bool sonuc = KrediKartNoDogruMu(kkNo);
-            while (sonuc)
-            {
-                Console.WriteLine("Kart numarasını eksik girdiniz, tekrar giriniz");
-                kkNo = Console.ReadLine();
-                sonuc = KrediKartNoDogruMu(kkNo);
-            }
-            Console.WriteLine();
-            ParaCekimTransferOdemeMethodu("Yatırılacak", "yatırılmıştır");
-
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(kkNo, 16);
+            KrediKVeHavaleCikisMethodu(kkNo, sonuc, 16, "Yatırılacak", "yatırılmıştır");
         }
 
-        public bool KrediKartNoDogruMu(string kartNo)
+        /// <summary>
+        /// Kredi kartı veya havale işlemi sırasında çıkış yapmamızı sağlayan method 
+        /// </summary>
+        /// <param name="No"></param>
+        /// <param name="sonuc"></param>
+        /// <param name="kacHane"></param>
+        /// <param name="islem1"></param>
+        /// <param name="islem2"></param>
+        private void KrediKVeHavaleCikisMethodu(string No, bool sonuc, byte kacHane, string islem1, string islem2)
+        {
+            while (sonuc)
+            {
+                Console.WriteLine("Kart numarasını eksik girdiniz, tekrar giriniz\tANAMENÜ  (9)\tÇIKIŞ  (0)");
+                No = Console.ReadLine();
+                if (No == "0")
+                {
+                    direkCikis = true;
+                    break;
+                }
+                else if (No == "9")
+                    break;
+                sonuc = HavaleVeyaKrediKartNoDogruMu(No, kacHane);
+            }
+            if (!(No == "9" || No == "0"))
+            {
+                Console.WriteLine();
+                ParaCekimTransferOdemeMethodu(islem1, islem2);
+            }
+        }
+
+        /// <summary>
+        /// Havale veya kredi kartı numarasının doğruluğunu kontrol eden method
+        /// </summary>
+        /// <param name="kartNo"></param>
+        /// <param name="kacBasamak"></param>
+        /// <returns></returns>
+        public bool HavaleVeyaKrediKartNoDogruMu(string kartNo, byte kacBasamak)
         {
             int counter = 0;
             bool sonuc = true;
             char[] sayilar = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-            if (kartNo.Length == 16)
+            if (kartNo.Length == kacBasamak)
             {
                 for (int i = 0; i < kartNo.Length; i++)
                 {
@@ -284,7 +363,7 @@
                         }
                     }
                 }
-                if (counter == 16)
+                if (counter == kacBasamak)
                 {
                     sonuc = false;
                 }
@@ -292,87 +371,81 @@
             return sonuc;
         }
 
+        /// <summary>
+        /// Hesaba para yatırma methodu
+        /// </summary>
+        /// <param name="secim"></param>
         public void HesabaYatir(bool secim = false)
         {
             Console.WriteLine("Yatırılacak tutarı giriniz");
             double tutar = Convert.ToDouble(Console.ReadLine());
             kasaBakiye += tutar;
             Console.WriteLine("İşleminiz Tamamlanmıştır!!!\n");
-            Console.Write("Güncel Bakiye: " + kasaBakiye + " TL\n");
-            Console.WriteLine("\nAna menü için (9), ÇIKIŞ için (0) a basınız");
+            Console.Write("Güncel Bakiye: " + kasaBakiye + " TL\n\n");
         }
 
+        /// <summary>
+        /// Para transferi seçiminde değer döndüren method
+        /// </summary>
+        /// <returns></returns>
         static string ParaTransferleriSecimi()
         {
             string secim;
             do
             {
-                Console.WriteLine("Başka Hesaba EFT\t 1");
-                Console.WriteLine("Başka Hesaba Havale\t 2");
+                Console.WriteLine("\tBaşka Hesaba EFT\t 1");
+                Console.WriteLine("\tBaşka Hesaba Havale\t 2");
                 secim = Console.ReadLine();
                 Console.WriteLine();
             } while (secim != "1" && secim != "2");
             return secim;
         }
 
+        /// <summary>
+        /// EFT methodu
+        /// </summary>
         public void BaskaHesabaEFT()
         {
             Console.WriteLine("14 haneli EFT numarasını giriniz");
             string eftNo = Console.ReadLine();
             bool sonuc = HesapDogruMuEFT(eftNo);
-
             while (sonuc)
             {
-                Console.WriteLine("EFT numarasını eksik girdiniz, tekrar giriniz");
+                Console.WriteLine("Kart numarasını eksik girdiniz, tekrar giriniz\tANAMENÜ  (9)\tÇIKIŞ  (0)");
                 eftNo = Console.ReadLine();
+                if (eftNo == "0")
+                {
+                    direkCikis = true;
+                    break;
+                }
+                else if (eftNo == "9")
+                    break;
                 sonuc = HesapDogruMuEFT(eftNo);
             }
-
-            ParaCekimTransferOdemeMethodu("Gönderilecek", "gönderilmiştir");
+            if (!(eftNo == "9" || eftNo == "0"))
+            {
+                Console.WriteLine();
+                ParaCekimTransferOdemeMethodu("Gönderilecek", "gönderilmiştir");
+            }
 
         }
-
+        
+        /// <summary>
+        /// Havale methodu
+        /// </summary>
         public void BaskaHesabaHavale()
         {
             Console.WriteLine("11 haneli Hesap numarasını giriniz");
             string hesapNo = Console.ReadLine();
-            bool sonuc = HesapDogruMuHavale(hesapNo);
-            while (sonuc)
-            {
-                Console.WriteLine("Hesap numarasını eksik girdiniz, tekrar giriniz");
-                hesapNo = Console.ReadLine();
-                sonuc = HesapDogruMuHavale(hesapNo);
-            }
-
-            ParaCekimTransferOdemeMethodu("Gönderilecek", "gönderilmiştir");
-
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(hesapNo, 11);
+            KrediKVeHavaleCikisMethodu(hesapNo, sonuc, 11, "Gönderilecek", "gönderilmiştir");
         }
 
-        static bool HesapDogruMuHavale(string hesapNo)
-        {
-            int counter = 0;
-            bool sonuc = true;
-            char[] sayilar = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-            if (hesapNo.Length == 11)
-            {
-                for (int i = 0; i < hesapNo.Length; i++)
-                {
-                    for (int j = 0; j < sayilar.Length; j++)
-                    {
-                        if (hesapNo[i] == sayilar[j])
-                        {
-                            counter++;
-                        }
-                    }
-                }
-                if (counter == 11)
-                {
-                    sonuc = false;
-                }
-            }
-            return sonuc;
-        }
-
+        /// <summary>
+        /// EFT numarasının doğruluğunu kontrol eden method
+        /// </summary>
+        /// <param name="eftNo"></param>
+        /// <returns></returns>
         static bool HesapDogruMuEFT(string eftNo)
         {
             int counter = 0;
@@ -408,56 +481,85 @@
             Console.WriteLine("Şu An Erişim Sağlanamıyor!!!\n");
         }
 
+        /// <summary>
+        /// Ödemeler seçimine göre değer döndüren method
+        /// </summary>
+        /// <returns></returns>
         static string Odemeler()
         {
             string secim = "0";
-            Console.WriteLine("*******  Fatura Ödemeleri  *******");
-            Console.WriteLine("Elektrik Faturası\t 1");
-            Console.WriteLine("Su Faturası\t\t 2");
-            Console.WriteLine("Telefon Faturası\t 3");
-            Console.WriteLine("İnternet Faturası\t 4");
-            Console.WriteLine("OGS Ödemeleri\t\t 5");
+            Console.WriteLine("\t*******  Ödemeler  *******");
+            Console.WriteLine("\tElektrik Faturası\t 1");
+            Console.WriteLine("\tSu Faturası\t\t 2");
+            Console.WriteLine("\tTelefon Faturası\t 3");
+            Console.WriteLine("\tİnternet Faturası\t 4");
+            Console.WriteLine("\tOGS Ödemeleri\t\t 5");
             secim = Console.ReadLine();
             Console.WriteLine();
             return secim;
         }
 
+        /// <summary>
+        /// Fatura ödeme methodu
+        /// </summary>
         public void ElektrikFaturasiOdemesi()
         {
             FaturaOdeme();
         }
 
+        /// <summary>
+        /// Fatura ödeme methodu
+        /// </summary>
         public void SuFaturasiOdemesi()
         {
             FaturaOdeme();
         }
 
+        /// <summary>
+        /// Fatura ödeme methodu
+        /// </summary>
         public void TelefonFaturasiOdemesi()
         {
             FaturaOdeme();
         }
 
+        /// <summary>
+        /// Fatura ödeme methodu
+        /// </summary>
         public void InternetFaturasiOdemesi()
         {
             FaturaOdeme();
         }
 
+        /// <summary>
+        /// Fatura ödeme methodu
+        /// </summary>
         public void OgsOdemeleri()
         {
             FaturaOdeme();
         }
 
+        /// <summary>
+        /// Ödeme methoduna yönlendiren method
+        /// </summary>
         public void FaturaOdeme()
         {
             ParaCekimTransferOdemeMethodu("Ödenecek", "ödenmiştir");
         }
 
+        /// <summary>
+        /// Bilgi güncelleme seçimine göre değer döndüren method
+        /// </summary>
+        /// <returns></returns>
         static string BilgiGuncelleme()
         {
-            Console.WriteLine("Şifre değiştirmek için \t1");
+            Console.WriteLine("\tŞifre değiştirmek için \t1");
             return Console.ReadLine();
         }
 
+        /// <summary>
+        /// Şifre değiştirme methodu
+        /// </summary>
         public void SifreDegistirme()
         {
             Console.WriteLine("Lütfen yeni şifrenizi giriniz");
