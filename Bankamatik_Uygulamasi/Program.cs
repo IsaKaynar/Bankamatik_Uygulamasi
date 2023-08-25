@@ -210,6 +210,11 @@ namespace Bankamatik
             
             Console.Write(islem + " tutarı giriniz: ");
             double tutar = Convert.ToDouble(Console.ReadLine());
+            while (tutar <= 0)
+            {
+                Console.WriteLine("Negatif sayı veya 0 giremezsiniz, tekrar giriniz");
+                tutar = Convert.ToDouble(Console.ReadLine());
+            }
             Console.WriteLine();
             string tekrarTutarGir = "2";
             // Aşağıdaki while: doğrulama, tutar güncelleme, çıkış işlemini yapar 
