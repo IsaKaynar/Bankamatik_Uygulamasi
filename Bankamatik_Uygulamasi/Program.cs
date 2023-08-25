@@ -207,17 +207,16 @@ namespace Bankamatik
         {
             double degiskenKasa = 0;
             Console.WriteLine("Kullanılabilir hesap bakiyeniz: " + kasaBakiye + " TL\n");
-            
             Console.Write(islem + " tutarı giriniz: ");
             double tutar = Convert.ToDouble(Console.ReadLine());
-            while (tutar <= 0)
+            while (tutar <= 0)// Negatif sayı ve 0 girildiğinde aktif olur
             {
                 Console.WriteLine("Negatif sayı veya 0 giremezsiniz, tekrar giriniz");
                 tutar = Convert.ToDouble(Console.ReadLine());
             }
             Console.WriteLine();
-            string tekrarTutarGir = "2";
-            // Aşağıdaki while: doğrulama, tutar güncelleme, çıkış işlemini yapar 
+            // Aşağıdaki while: doğrulama, tutar güncelleme, çıkış işlemini yapar
+            string tekrarTutarGir = "2"; 
             while (tekrarTutarGir == "2")
             {
                 Console.WriteLine(islem + " Tutar: " + tutar + " TL\n\nDogru ise \t\t\t1 \nYeniden tutar girmek için \t2 \nANA MENÜ \t\t\t9 \nÇIKIŞ \t\t\t\t0");
@@ -239,7 +238,10 @@ namespace Bankamatik
                     direkCikis = true;
                 }
             }
-            degiskenKasa = kasaBakiye - tutar;
+            if (!(tekrarTutarGir == "9" || tekrarTutarGir == "0")) // Yetersiz bakiye durumunda çıkış yapıldığında oluşan bug için eklenmiştir
+            {
+                degiskenKasa = kasaBakiye - tutar;
+            }
             if (degiskenKasa >= 0 && tekrarTutarGir == "1")
             {
                 kasaBakiye -= tutar;
