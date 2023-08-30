@@ -6,7 +6,7 @@ namespace Bankamatik
     internal class Program
     {
         double kasaBakiye = 250; // Başlangıç bakiyesi global değişken olarak tanımlanmıştır
-        string sifre = "1"; // Aynı şekilde şifre
+        string sifre = "1"; // Aynı şekilde şifrede
         bool direkCikis = false; // işlemler esnasında çıkış yapabilmek için kullandığımız değişken
         static void Main(string[] args)
         {
@@ -312,7 +312,7 @@ namespace Bankamatik
         {
             Console.WriteLine("16 haneli Kredi Kartı numaranızı giriniz");
             string kkNo = Console.ReadLine();
-            bool sonuc = HavaleVeyaKrediKartNoDogruMu(kkNo, 16, 0, 0);
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(kkNo, 16, 0);
             KrediKVeHavaleCikisMethodu(kkNo, sonuc, 16, "Yatırılacak", "yatırılmıştır");
         }
 
@@ -337,7 +337,7 @@ namespace Bankamatik
                 }
                 else if (No == "9")
                     break;
-                sonuc = HavaleVeyaKrediKartNoDogruMu(No, kacHane, 0, 0);
+                sonuc = HavaleVeyaKrediKartNoDogruMu(No, kacHane, 0);
             }
             if (!(No == "9" || No == "0"))
             {
@@ -352,14 +352,14 @@ namespace Bankamatik
         /// <param name="kartNo"></param>
         /// <param name="kacBasamak"></param>
         /// <returns></returns>
-        public bool HavaleVeyaKrediKartNoDogruMu(string kartNo, byte kacBasamak, byte baslangic, byte fark)
+        public bool HavaleVeyaKrediKartNoDogruMu(string kartNo, byte kacBasamak, byte fark)
         {
             int counter = 0;
             bool sonuc = true;
             char[] sayilar = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
             if (kartNo.Length == kacBasamak)
             {
-                for (int i = baslangic; i < kartNo.Length; i++)
+                for (int i = fark; i < kartNo.Length; i++)
                 {
                     for (int j = 0; j < sayilar.Length; j++)
                     {
@@ -443,7 +443,7 @@ namespace Bankamatik
         {
             Console.WriteLine("11 haneli Hesap numarasını giriniz");
             string hesapNo = Console.ReadLine();
-            bool sonuc = HavaleVeyaKrediKartNoDogruMu(hesapNo, 11, 0, 0);
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(hesapNo, 11, 0);
             KrediKVeHavaleCikisMethodu(hesapNo, sonuc, 11, "Gönderilecek", "gönderilmiştir");
         }
 
@@ -459,7 +459,7 @@ namespace Bankamatik
                 Console.WriteLine("EFT numarasının başında TR olmalı, tekrar giriniz");
                 eftNo = Console.ReadLine();
             }
-            bool sonuc = HavaleVeyaKrediKartNoDogruMu(eftNo, 14, 2, 2);
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(eftNo, 14, 2);
             return sonuc;
         }
 
