@@ -303,7 +303,7 @@ namespace Bankamatik
             } while (secim != "1" && secim != "2");
             return secim;
         }
-
+         
         /// <summary>
         /// Kredi Kartı ödeme methodu
         /// </summary>
