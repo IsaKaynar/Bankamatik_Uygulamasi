@@ -324,7 +324,7 @@ namespace Bankamatik
         /// <param name="kacHane"></param>
         /// <param name="islem1"></param>
         /// <param name="islem2"></param>
-        private void KrediKVeHavaleCikisMethodu(string No, bool sonuc, byte kacHane, string islem1, string islem2)
+        public void KrediKVeHavaleCikisMethodu(string No, bool sonuc, byte kacHane, string islem1, string islem2)
         {
             while (sonuc)
             {
