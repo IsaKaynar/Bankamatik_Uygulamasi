@@ -310,10 +310,10 @@ namespace Bankamatik
         /// <param name="secim"></param>
         public void KrediKartinaYatir(bool secim = true)
         {
-            Console.WriteLine("16 haneli Kredi Kartı numaranızı giriniz");
+            Console.WriteLine("12 haneli Kredi Kartı numaranızı giriniz");
             string kkNo = Console.ReadLine();
-            bool sonuc = HavaleVeyaKrediKartNoDogruMu(kkNo, 16, 0);
-            KrediKVeHavaleCikisMethodu(kkNo, sonuc, 16, "Yatırılacak", "yatırılmıştır");
+            bool sonuc = HavaleVeyaKrediKartNoDogruMu(kkNo, 12, 0);
+            KrediKVeHavaleCikisMethodu(kkNo, sonuc, 12, "Yatırılacak", "yatırılmıştır");
         }
 
         /// <summary>
